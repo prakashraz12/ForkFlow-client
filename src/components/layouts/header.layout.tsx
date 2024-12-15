@@ -12,8 +12,15 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { COMPANY_NAME, LOGO_IMAGE } from "@/constant";
 import ThemeSwitcherComponent from "../common/themeSwitcher.component";
+import { useDispatch, useSelector } from "react-redux";
+import { clearAuthState } from "@/features/auth/authSlice";
 
 export default function HeaderLayout() {
+  const user = useSelector((state: any) => state.auth.user);
+  const dispatch = useDispatch();
+  const handleLogOut = () => {
+    dispatch(clearAuthState())
+  }
   return (
     <nav className="border-b bg-background dark:bg-black w-full sticky top-0 z-50 max-h-20">
       <div className=" flex h-16 items-center px-4">
@@ -53,9 +60,9 @@ export default function HeaderLayout() {
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">John Doe</p>
+                  <p className="text-sm font-medium leading-none">{user?.restaurantName }</p>
                   <p className="text-xs leading-none text-muted-foreground">
-                    john.doe@example.com
+                  {user?.email}
                   </p>
                 </div>
               </DropdownMenuLabel>
@@ -64,7 +71,7 @@ export default function HeaderLayout() {
                 <Settings className="mr-2 h-4 w-4" />
                 <span>Settings</span>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogOut}>
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Log out</span>
               </DropdownMenuItem>
